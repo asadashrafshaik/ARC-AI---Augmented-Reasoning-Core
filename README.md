@@ -198,22 +198,22 @@ curl -X POST http://127.0.0.1:8000/api/nlp/analyze \
 
 ## Project Structure
 ├── app/  
-│   ├── config.py           # Central settings (reads .env)  
-│   ├── scraper.py          # Multi-source scraper (browser UA, 2-hop crawl)  
-│   ├── chunker.py          # Token-aware chunking (tiktoken)  
-│   ├── vectorstore.py      # ChromaDB wrapper (MiniLM embeddings)  
-│   ├── llm.py              # Ollama client (streaming, multi-model)  
-│   ├── nlp.py              # 9 NLP techniques (lazy-loaded models)  
-│   ├── chat.py             # CLI REPL  
-│   └── api.py              # FastAPI backend  
+│   ├── config.py             # Central settings (reads .env)  
+│   ├── scraper.py            # Multi-source scraper (browser UA, 2-hop crawl)  
+│   ├── chunker.py            # Token-aware chunking (tiktoken)  
+│   ├── vectorstore.py        # ChromaDB wrapper (MiniLM embeddings)  
+│   ├── llm.py                # Ollama client (streaming, multi-model)  
+│   ├── nlp.py                # 9 NLP techniques (lazy-loaded models)  
+│   ├── chat.py               # CLI REPL  
+│   └── api.py                # FastAPI backend  
 ├── scripts/  
-│   ├── ingest.py           # Scrape → chunk → embed → store  
-│   └── serve.py            # Server launcher  
+│   ├── ingest.py             # Scrape → chunk → embed → store  
+│   └── serve.py              # Server launcher  
 ├── web/  
-│   └── index.html          # Custom chat UI  
+│   └── index.html            # Custom chat UI  
 ├── data/  
-│   ├── raw/                # Scraped JSONL (git-ignored)  
-│   └── processed/          # ChromaDB (git-ignored)  
+│   ├── raw/                  # Scraped JSONL (git-ignored)  
+│   └── processed/            # ChromaDB (git-ignored)  
 ├── .env.example  
 ├── .gitignore  
 ├── requirements.txt  
