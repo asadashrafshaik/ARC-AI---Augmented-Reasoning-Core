@@ -20,7 +20,12 @@ class RetrievalHit:
     source: str
     url: str
     title: str
-    score: float
+    score: float       # cosine similarity in [0, 1] (1 - cosine distance)
+
+    @property
+    def similarity(self) -> float:
+        """Alias for score, exposed for downstream metrics consumers."""
+        return self.score
 
 
 class VectorStore:
@@ -34,6 +39,11 @@ class VectorStore:
             embedding_function=self._embed_fn,
             metadata={"hnsw:space": "cosine"},
         )
+
+    @property
+    def collection(self):
+        """Public accessor so api.py can call .get() for corpus-wide metadata."""
+        return self._collection
 
     # ----- write -----
     def add_chunks(self, chunks: Iterable[Chunk]) -> int:
@@ -65,13 +75,16 @@ class VectorStore:
         metas = res.get("metadatas", [[]])[0]
         dists = res.get("distances", [[]])[0]
         for doc, meta, dist in zip(docs, metas, dists):
+            # ChromaDB returns cosine distance. Similarity = 1 - distance,
+            # clamped to [0, 1] in case of small floating-point drift.
+            similarity = max(0.0, min(1.0, 1.0 - float(dist)))
             hits.append(
                 RetrievalHit(
                     text=doc,
                     source=meta.get("source", ""),
                     url=meta.get("url", ""),
                     title=meta.get("title", ""),
-                    score=1.0 - float(dist),    # cosine distance → similarity
+                    score=similarity,
                 )
             )
         return hits

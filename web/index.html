@@ -35,12 +35,14 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 15px;
     line-height: 1.6;
-    overflow: hidden;
+    overflow: auto;
+    min-height: 100vh;
   }
   .app {
     display: grid;
     grid-template-columns: 280px 1fr;
     height: 100vh;
+    min-height: 600px;
   }
 
   /* ---------- SIDEBAR ---------- */
@@ -50,6 +52,7 @@
     display: flex;
     flex-direction: column;
     padding: 20px 14px;
+    min-height: 0;
   }
   .brand {
     display: flex;
@@ -58,6 +61,7 @@
     padding: 6px 8px 20px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 16px;
+    flex-shrink: 0;
   }
   .logo { width: 38px; height: 38px; flex-shrink: 0; }
   .brand-text {
@@ -92,6 +96,7 @@
     gap: 8px;
     transition: background 0.15s;
     width: 100%;
+    flex-shrink: 0;
   }
   .new-chat-btn:hover { background: var(--terracotta-dark); }
   .sessions-label {
@@ -102,8 +107,14 @@
     color: var(--text-faint);
     margin: 22px 10px 8px;
     font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
   }
-  .session-list { overflow-y: auto; flex: 1; padding-right: 4px; }
+  .session-list {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    padding-right: 4px;
+  }
   .session-item {
     padding: 9px 12px;
     font-size: 13px;
@@ -130,10 +141,16 @@
     font-size: 11px;
     color: var(--text-faint);
     line-height: 1.5;
+    flex-shrink: 0;
   }
 
   /* ---------- MAIN ---------- */
-  .main { display: flex; flex-direction: column; overflow: hidden; }
+  .main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
   .topbar {
     display: flex;
     justify-content: space-between;
@@ -141,6 +158,7 @@
     padding: 14px 28px;
     border-bottom: 1px solid var(--border);
     background: var(--bg);
+    flex-shrink: 0;
   }
   .topbar-title { font-size: 16px; font-weight: 500; color: var(--text); letter-spacing: -0.01em; }
   .model-switcher { display: flex; align-items: center; gap: 10px; }
@@ -170,7 +188,12 @@
   .model-select:focus { outline: none; border-color: var(--terracotta); }
 
   /* ---------- MESSAGES ---------- */
-  .messages { flex: 1; overflow-y: auto; padding: 32px 0; }
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 0;
+    min-height: 0;
+  }
   .message-wrap { max-width: 760px; margin: 0 auto; padding: 0 28px 32px; }
   .msg-role {
     font-size: 10px;
@@ -210,11 +233,7 @@
     text-decoration: none;
   }
   .cite:hover { background: #e8c878; }
-  .sources {
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--border);
-  }
+  .sources { margin-top: 16px; padding-top: 12px; border-top: 1px dashed var(--border); }
   .sources-label {
     font-size: 9px;
     letter-spacing: 0.16em;
@@ -240,11 +259,7 @@
     transition: all 0.15s;
   }
   .source-pill:hover { border-color: var(--terracotta); color: var(--text); }
-  .source-pill .s-num {
-    color: var(--terracotta);
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-  }
+  .source-pill .s-num { color: var(--terracotta); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
   .source-pill .s-src {
     color: var(--text-faint);
     text-transform: uppercase;
@@ -254,12 +269,14 @@
     font-weight: 500;
   }
 
-  /* ---------- NLP PANEL ---------- */
-  .nlp-trigger {
+  /* ---------- ACTION BUTTONS ---------- */
+  .action-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .nlp-trigger,
+  .metrics-trigger,
+  .compare-trigger {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    margin-top: 10px;
     padding: 5px 12px;
     background: transparent;
     border: 1px solid var(--border);
@@ -272,16 +289,21 @@
     letter-spacing: 0.05em;
     transition: all 0.15s;
   }
-  .nlp-trigger:hover {
+  .nlp-trigger:hover,
+  .metrics-trigger:hover,
+  .compare-trigger:hover {
     border-color: var(--terracotta);
     color: var(--terracotta);
     background: rgba(184, 93, 62, 0.05);
   }
-  .nlp-trigger.loading {
+  .nlp-trigger.loading,
+  .metrics-trigger.loading,
+  .compare-trigger.loading {
     opacity: 0.6;
     pointer-events: none;
   }
 
+  /* ---------- NLP PANEL ---------- */
   .nlp-panel {
     margin-top: 14px;
     padding: 16px;
@@ -291,7 +313,9 @@
     display: none;
   }
   .nlp-panel.open { display: block; }
-  .nlp-panel-title {
+  .nlp-panel-title,
+  .metrics-panel-title,
+  .compare-panel-title {
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.16em;
@@ -302,19 +326,8 @@
     padding-bottom: 8px;
     border-bottom: 1px solid var(--border);
   }
-
-  .nlp-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .nlp-card {
-    padding: 12px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-  }
+  .nlp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .nlp-card { padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
   .nlp-card-title {
     font-size: 10px;
     font-weight: 600;
@@ -324,21 +337,9 @@
     font-family: 'JetBrains Mono', monospace;
     margin-bottom: 8px;
   }
-  .nlp-card-model {
-    font-size: 9px;
-    color: var(--text-faint);
-    font-family: 'JetBrains Mono', monospace;
-    margin-bottom: 6px;
-  }
-  .nlp-card-body {
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.6;
-  }
-  .nlp-card-body strong {
-    color: var(--text);
-    font-weight: 600;
-  }
+  .nlp-card-model { font-size: 9px; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; margin-bottom: 6px; }
+  .nlp-card-body { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+  .nlp-card-body strong { color: var(--text); font-weight: 600; }
   .nlp-tag {
     display: inline-block;
     padding: 2px 7px;
@@ -350,12 +351,7 @@
     font-family: 'JetBrains Mono', monospace;
     margin: 2px 3px 2px 0;
   }
-  .nlp-bar-wrap {
-    margin: 3px 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+  .nlp-bar-wrap { margin: 3px 0; display: flex; align-items: center; gap: 6px; }
   .nlp-bar-label {
     font-size: 10px;
     color: var(--text-dim);
@@ -364,29 +360,153 @@
     flex-shrink: 0;
     font-family: 'JetBrains Mono', monospace;
   }
-  .nlp-bar-track {
-    flex: 1;
-    height: 8px;
+  .nlp-bar-track { flex: 1; height: 8px; background: var(--bg-elev); border-radius: 4px; border: 1px solid var(--border); overflow: hidden; }
+  .nlp-bar-fill { height: 100%; border-radius: 4px; background: var(--terracotta); transition: width 0.3s ease; }
+  .nlp-bar-score { font-size: 10px; color: var(--text-faint); width: 36px; font-family: 'JetBrains Mono', monospace; }
+  .nlp-card.full { grid-column: 1 / -1; }
+
+  /* ---------- METRICS PANEL ---------- */
+  .metrics-panel {
+    margin-top: 14px;
+    padding: 16px;
     background: var(--bg-elev);
-    border-radius: 4px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: none;
+  }
+  .metrics-panel.open { display: block; }
+  .metric-section {
+    margin-bottom: 14px;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .metric-section:last-child { margin-bottom: 0; }
+  .metric-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 10px;
+  }
+  .metric-row { display: flex; align-items: center; margin-bottom: 6px; font-size: 12px; }
+  .metric-label { flex: 1; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .metric-value { font-weight: 600; color: var(--text); font-family: 'JetBrains Mono', monospace; margin-right: 8px; }
+  .metric-bar-track {
+    width: 120px;
+    height: 6px;
+    background: var(--bg-elev);
+    border-radius: 3px;
     border: 1px solid var(--border);
     overflow: hidden;
+    margin-right: 8px;
   }
-  .nlp-bar-fill {
-    height: 100%;
+  .metric-bar-fill { height: 100%; background: var(--terracotta); transition: width 0.3s ease; }
+  .metric-badge {
+    display: inline-block;
+    padding: 2px 8px;
     border-radius: 4px;
-    background: var(--terracotta);
-    transition: width 0.3s ease;
-  }
-  .nlp-bar-score {
     font-size: 10px;
-    color: var(--text-faint);
-    width: 36px;
+    font-weight: 600;
     font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .metric-badge.strong,
+  .metric-badge.ground_truth { background: #d4e9c2; color: #4a6b2a; }
+  .metric-badge.moderate,
+  .metric-badge.self_consistency { background: var(--amber-light); color: var(--amber-text); }
+  .metric-badge.weak { background: #f0c5b3; color: #7a3920; }
+  .metric-source-list { margin-top: 4px; font-size: 11px; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; }
+  .metric-note {
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: var(--bg-elev);
+    border-left: 2px solid var(--amber);
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    font-style: italic;
   }
 
-  /* full-width cards */
-  .nlp-card.full { grid-column: 1 / -1; }
+  /* ---------- COMPARE PANEL ---------- */
+  .compare-panel {
+    margin-top: 14px;
+    padding: 16px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: none;
+  }
+  .compare-panel.open { display: block; }
+  .compare-table-wrap { overflow-x: auto; margin-bottom: 14px; }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+  .compare-table th,
+  .compare-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table th {
+    background: var(--bg);
+    color: var(--terracotta);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 10px;
+  }
+  .compare-table td { color: var(--text-dim); }
+  .compare-table tr.winner-row td { background: rgba(212, 233, 194, 0.3); color: var(--text); font-weight: 600; }
+  .compare-table .metric-name { color: var(--text); font-weight: 600; min-width: 160px; }
+  .compare-table .col-numeric { text-align: right; font-variant-numeric: tabular-nums; }
+  .compare-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-family: 'JetBrains Mono', monospace;
+    margin: 14px 0 8px;
+  }
+  .compare-answer-block {
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .compare-answer-model {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--terracotta);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .compare-answer-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .compare-progress {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
 
   /* ---------- WELCOME ---------- */
   .welcome {
@@ -460,7 +580,11 @@
   @keyframes blink { 50% { opacity: 0; } }
 
   /* ---------- COMPOSER ---------- */
-  .composer-wrap { padding: 16px 28px 20px; background: var(--bg); }
+  .composer-wrap {
+    padding: 12px 28px 16px;
+    background: var(--bg);
+    flex-shrink: 0;
+  }
   .composer {
     max-width: 760px;
     margin: 0 auto;
@@ -482,17 +606,17 @@
     color: var(--text);
     font-family: inherit;
     font-size: 15px;
-    padding: 16px 60px 16px 18px;
+    padding: 14px 60px 14px 18px;
     resize: none;
     max-height: 200px;
-    min-height: 56px;
+    min-height: 50px;
     line-height: 1.5;
   }
   .composer textarea::placeholder { color: var(--text-placeholder); }
   .send-btn {
     position: absolute;
     right: 10px;
-    bottom: 10px;
+    bottom: 8px;
     width: 36px;
     height: 36px;
     background: var(--terracotta);
@@ -509,7 +633,7 @@
   .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
   .composer-hint {
     max-width: 760px;
-    margin: 8px auto 0;
+    margin: 6px auto 0;
     font-size: 11px;
     color: var(--text-faint);
     text-align: center;
@@ -666,161 +790,217 @@
   function renderNLPPanel(data) {
     const r = data.results;
     let cards = "";
-
-    // Intent
     if (r.intent) {
       const intents = (r.intent.all_intents || []).map(i => renderBar(i.label, i.score)).join("");
-      cards += `<div class="nlp-card">
-        <div class="nlp-card-title">Intent Classification</div>
-        <div class="nlp-card-model">${esc(r.intent.model || "")}</div>
-        <div class="nlp-card-body">
-          <strong>${esc(r.intent.top_intent)}</strong> (${Math.round(r.intent.confidence * 100)}%)
-          <div style="margin-top:6px">${intents}</div>
-        </div>
-      </div>`;
+      cards += `<div class="nlp-card"><div class="nlp-card-title">Intent Classification</div><div class="nlp-card-model">${esc(r.intent.model || "")}</div><div class="nlp-card-body"><strong>${esc(r.intent.top_intent)}</strong> (${Math.round(r.intent.confidence * 100)}%)<div style="margin-top:6px">${intents}</div></div></div>`;
     }
-
-    // Sentiment
     if (r.sentiment) {
-      const v = r.sentiment.vader || {};
-      const rb = r.sentiment.roberta || {};
-      cards += `<div class="nlp-card">
-        <div class="nlp-card-title">Sentiment Analysis</div>
-        <div class="nlp-card-model">VADER + RoBERTa</div>
-        <div class="nlp-card-body">
-          <strong>VADER compound:</strong> ${v.compound ?? "n/a"}<br>
-          ${renderBar("Positive", v.positive || 0)}
-          ${renderBar("Negative", v.negative || 0)}
-          ${renderBar("Neutral", v.neutral || 0)}
-          <div style="margin-top:6px"><strong>RoBERTa:</strong> <span class="nlp-tag">${esc(rb.label || "n/a")}</span> (${Math.round((rb.score || 0) * 100)}%)</div>
-        </div>
-      </div>`;
+      const v = r.sentiment.vader || {}, rb = r.sentiment.roberta || {};
+      cards += `<div class="nlp-card"><div class="nlp-card-title">Sentiment Analysis</div><div class="nlp-card-model">VADER + RoBERTa</div><div class="nlp-card-body"><strong>VADER compound:</strong> ${v.compound ?? "n/a"}<br>${renderBar("Positive", v.positive || 0)}${renderBar("Negative", v.negative || 0)}${renderBar("Neutral", v.neutral || 0)}<div style="margin-top:6px"><strong>RoBERTa:</strong> <span class="nlp-tag">${esc(rb.label || "n/a")}</span> (${Math.round((rb.score || 0) * 100)}%)</div></div></div>`;
     }
-
-    // Emotion
     if (r.emotion) {
       const emotions = (r.emotion.all_emotions || []).map(e => renderBar(e.emotion, e.score)).join("");
-      cards += `<div class="nlp-card">
-        <div class="nlp-card-title">Emotion Detection</div>
-        <div class="nlp-card-model">${esc(r.emotion.model || "")}</div>
-        <div class="nlp-card-body">
-          <strong>${esc(r.emotion.top_emotion)}</strong> (${Math.round(r.emotion.confidence * 100)}%)
-          <div style="margin-top:6px">${emotions}</div>
-        </div>
-      </div>`;
+      cards += `<div class="nlp-card"><div class="nlp-card-title">Emotion Detection</div><div class="nlp-card-model">${esc(r.emotion.model || "")}</div><div class="nlp-card-body"><strong>${esc(r.emotion.top_emotion)}</strong> (${Math.round(r.emotion.confidence * 100)}%)<div style="margin-top:6px">${emotions}</div></div></div>`;
     }
-
-    // Readability
     if (r.readability && !r.readability.error) {
-      cards += `<div class="nlp-card">
-        <div class="nlp-card-title">Readability</div>
-        <div class="nlp-card-model">Flesch-Kincaid</div>
-        <div class="nlp-card-body">
-          <strong>Grade level:</strong> ${r.readability.flesch_kincaid_grade}<br>
-          <strong>Reading ease:</strong> ${r.readability.flesch_reading_ease}<br>
-          <strong>Difficulty:</strong> <span class="nlp-tag">${esc(r.readability.difficulty)}</span><br>
-          <div style="margin-top:4px;font-size:11px;color:var(--text-faint)">${r.readability.stats?.words || 0} words · ${r.readability.stats?.sentences || 0} sentences</div>
-        </div>
-      </div>`;
+      cards += `<div class="nlp-card"><div class="nlp-card-title">Readability</div><div class="nlp-card-model">Flesch-Kincaid</div><div class="nlp-card-body"><strong>Grade level:</strong> ${r.readability.flesch_kincaid_grade}<br><strong>Reading ease:</strong> ${r.readability.flesch_reading_ease}<br><strong>Difficulty:</strong> <span class="nlp-tag">${esc(r.readability.difficulty)}</span><br><div style="margin-top:4px;font-size:11px;color:var(--text-faint)">${r.readability.stats?.words || 0} words · ${r.readability.stats?.sentences || 0} sentences</div></div></div>`;
     }
-
-    // Extractive QA
     if (r.extractive_qa) {
-      cards += `<div class="nlp-card">
-        <div class="nlp-card-title">Extractive QA</div>
-        <div class="nlp-card-model">${esc(r.extractive_qa.model || "")}</div>
-        <div class="nlp-card-body">
-          <strong>"${esc(r.extractive_qa.answer || "n/a")}"</strong><br>
-          <div style="margin-top:4px">Confidence: ${Math.round((r.extractive_qa.confidence || 0) * 100)}%</div>
-        </div>
-      </div>`;
+      cards += `<div class="nlp-card"><div class="nlp-card-title">Extractive QA</div><div class="nlp-card-model">${esc(r.extractive_qa.model || "")}</div><div class="nlp-card-body"><strong>"${esc(r.extractive_qa.answer || "n/a")}"</strong><br><div style="margin-top:4px">Confidence: ${Math.round((r.extractive_qa.confidence || 0) * 100)}%</div></div></div>`;
     }
-
-    // Summary
     if (r.summary) {
-      cards += `<div class="nlp-card">
-        <div class="nlp-card-title">Summary</div>
-        <div class="nlp-card-model">${esc(r.summary.model || "")}</div>
-        <div class="nlp-card-body">${esc(r.summary.summary || "n/a")}</div>
-      </div>`;
+      cards += `<div class="nlp-card"><div class="nlp-card-title">Summary</div><div class="nlp-card-model">${esc(r.summary.model || "")}</div><div class="nlp-card-body">${esc(r.summary.summary || "n/a")}</div></div>`;
     }
-
-    // Keywords
     if (r.keywords) {
       const kws = (r.keywords.keywords || []).map(k => `<span class="nlp-tag">${esc(k.keyword)} (${Math.round(k.score * 100)}%)</span>`).join(" ");
-      cards += `<div class="nlp-card full">
-        <div class="nlp-card-title">Keywords</div>
-        <div class="nlp-card-model">${esc(r.keywords.model || "")}</div>
-        <div class="nlp-card-body">${kws}</div>
-      </div>`;
+      cards += `<div class="nlp-card full"><div class="nlp-card-title">Keywords</div><div class="nlp-card-model">${esc(r.keywords.model || "")}</div><div class="nlp-card-body">${kws}</div></div>`;
     }
-
-    // NER
     if (r.ner) {
       const renderEntList = (label, items) => {
         if (!items || !items.length) return "";
         return `<div style="margin-bottom:6px"><strong>${label}:</strong> ${items.map(([t, c]) => `<span class="nlp-tag">${esc(t)} (${c})</span>`).join(" ")}</div>`;
       };
-      cards += `<div class="nlp-card full">
-        <div class="nlp-card-title">Named Entity Recognition</div>
-        <div class="nlp-card-model">${esc(r.ner.model || "")}</div>
-        <div class="nlp-card-body">
-          ${renderEntList("Dates", r.ner.dates)}
-          ${renderEntList("Money", r.ner.money)}
-          ${renderEntList("Statutes", r.ner.statute_references)}
-          ${renderEntList("Organizations", r.ner.organizations)}
-          <div style="margin-top:4px;font-size:11px;color:var(--text-faint)">Total entities: ${r.ner.total_entities || 0}</div>
-        </div>
-      </div>`;
+      cards += `<div class="nlp-card full"><div class="nlp-card-title">Named Entity Recognition</div><div class="nlp-card-model">${esc(r.ner.model || "")}</div><div class="nlp-card-body">${renderEntList("Dates", r.ner.dates)}${renderEntList("Money", r.ner.money)}${renderEntList("Statutes", r.ner.statute_references)}${renderEntList("Organizations", r.ner.organizations)}<div style="margin-top:4px;font-size:11px;color:var(--text-faint)">Total entities: ${r.ner.total_entities || 0}</div></div></div>`;
     }
+    return `<div class="nlp-panel open"><div class="nlp-panel-title">NLP Analysis — 8 techniques</div><div class="nlp-grid">${cards}</div></div>`;
+  }
 
-    return `<div class="nlp-panel open">
-      <div class="nlp-panel-title">NLP Analysis — 8 techniques</div>
-      <div class="nlp-grid">${cards}</div>
+  // ---------- METRICS PANEL ----------
+  function renderMetricsPanel(data) {
+    const m = data.metrics, cm = m.citation_metrics, rm = m.retrieval_metrics, gm = m.grounding_metrics, rk = m.ranking_metrics, interp = m.interpretation;
+    const bar = (label, value) => {
+      if (value === null || value === undefined) {
+        return `<div class="metric-row"><span class="metric-label">${esc(label)}</span><span class="metric-value" style="color:var(--text-faint)">n/a</span></div>`;
+      }
+      const pct = Math.round(value * 100);
+      return `<div class="metric-row"><span class="metric-label">${esc(label)}</span><div class="metric-bar-track"><div class="metric-bar-fill" style="width:${pct}%"></div></div><span class="metric-value">${(value).toFixed(3)}</span></div>`;
+    };
+    const row = (label, value) => `<div class="metric-row"><span class="metric-label">${esc(label)}</span><span class="metric-value">${esc(String(value ?? "n/a"))}</span></div>`;
+    const badge = (label, level) => `<div class="metric-row"><span class="metric-label">${esc(label)}</span><span class="metric-badge ${esc(level)}">${esc(level.replace(/_/g, ' '))}</span></div>`;
+    const sourcesList = rm.sources_used && rm.sources_used.length ? rm.sources_used.map(s => esc(s)).join(' · ') : 'none';
+    const rankingSection = `<div class="metric-section"><div class="metric-section-title">Retrieval Ranking (P@K · R@K · MRR · nDCG)</div>${badge('Evaluation mode', rk.evaluation_mode)}${row('Topic detected', rk.topic_label)}${bar('Precision @ ' + rk.k, rk.precision_at_k)}${bar('Recall @ ' + rk.k, rk.recall_at_k)}${bar('Mean Reciprocal Rank', rk.mrr)}${bar('nDCG @ ' + rk.k, rk.ndcg_at_k)}${row('Relevant in top-' + rk.k, rk.n_relevant_in_topk)}${row('Relevant in corpus', rk.n_relevant_in_corpus ?? "n/a")}<div class="metric-note">${esc(rk.note)}</div></div>`;
+    return `<div class="metrics-panel open"><div class="metrics-panel-title">Answer Metrics — Ranking, Citation Audit & Grounding</div>${rankingSection}<div class="metric-section"><div class="metric-section-title">Citation Faithfulness</div>${bar('Citation precision', cm.citation_precision)}${bar('Citation coverage', cm.citation_coverage)}${row('Total [S] markers', cm.total_citations)}${row('Supported by source', cm.supported_citations)}${row('Hallucinated markers', cm.hallucinated_citations)}${row('Cited / factual sentences', cm.n_cited_sentences + ' / ' + cm.n_factual_sentences)}${badge('Citation quality', interp.citation_quality)}${badge('Citation thoroughness', interp.citation_thoroughness)}</div><div class="metric-section"><div class="metric-section-title">Retrieval Diversity</div>${row('Chunks retrieved (top-K)', rm.n_chunks_retrieved)}${row('Unique source domains', rm.unique_sources)}${row('Unique URLs', rm.unique_urls)}<div class="metric-source-list">Sources: ${sourcesList}</div></div><div class="metric-section"><div class="metric-section-title">Grounding Strength</div>${bar('Answer-context overlap', gm.answer_context_overlap)}${bar('Query terms in answer', gm.query_in_answer)}${row('Answer length (words)', gm.answer_word_count)}${row('Context length (words)', gm.context_word_count)}${badge('Grounding strength', interp.grounding_strength)}</div></div>`;
+  }
+
+  // ---------- COMPARE PANEL ----------
+  function renderComparePanel(data) {
+    const results = (data.results || []).filter(r => !r.error);
+    if (!results.length) {
+      return `<div class="compare-panel open"><div class="compare-panel-title">Multi-Model Comparison</div><div class="metric-note">No models returned valid results.</div></div>`;
+    }
+    const bestIndices = {};
+    const numericMetrics = ["citation_precision", "citation_coverage", "answer_context_overlap", "precision_at_k", "mrr", "ndcg_at_k"];
+    numericMetrics.forEach(metric => {
+      let bestVal = -Infinity, bestIdx = -1;
+      results.forEach((r, i) => {
+        const v = r[metric];
+        if (v !== null && v !== undefined && v > bestVal) { bestVal = v; bestIdx = i; }
+      });
+      bestIndices[metric] = bestIdx;
+    });
+    let lowestTime = Infinity, lowestTimeIdx = -1;
+    results.forEach((r, i) => {
+      if (r.generation_time_sec < lowestTime) { lowestTime = r.generation_time_sec; lowestTimeIdx = i; }
+    });
+    bestIndices["generation_time_sec"] = lowestTimeIdx;
+
+    const modelHeaders = results.map(r => `<th>${esc(r.model)}</th>`).join("");
+    const formatVal = (v, isBest) => {
+      if (v === null || v === undefined) return '<td class="col-numeric">n/a</td>';
+      const display = typeof v === "number" ? v.toFixed(3) : esc(String(v));
+      const style = isBest ? ' style="color:#4a6b2a;font-weight:600"' : '';
+      return `<td class="col-numeric"${style}>${display}${isBest ? ' ✓' : ''}</td>`;
+    };
+    const formatRow = (metricName, key, suffix = "") => {
+      const cells = results.map((r, i) => {
+        const isBest = bestIndices[key] === i;
+        return formatVal(r[key], isBest);
+      }).join("");
+      return `<tr><td class="metric-name">${esc(metricName)}${suffix}</td>${cells}</tr>`;
+    };
+    const tableRows = [
+      formatRow("Citation precision", "citation_precision", " (higher is better)"),
+      formatRow("Citation coverage", "citation_coverage", " (higher is better)"),
+      formatRow("Hallucinated citations", "hallucinated_citations", " (lower is better)"),
+      formatRow("Answer-context overlap", "answer_context_overlap", " (higher is better)"),
+      formatRow("Precision @ 5", "precision_at_k", " (higher is better)"),
+      formatRow("MRR", "mrr", " (higher is better)"),
+      formatRow("nDCG @ 5", "ndcg_at_k", " (higher is better)"),
+      formatRow("Generation time (sec)", "generation_time_sec", " (lower is better)"),
+      formatRow("Answer length (words)", "answer_length_words", ""),
+    ].join("");
+
+    const evalMode = results[0].evaluation_mode;
+    const topicLabel = results[0].topic_label;
+    const evalBadge = `<div style="margin-bottom:14px">
+      <span class="metric-badge ${esc(evalMode)}">${esc(evalMode.replace(/_/g, ' '))}</span>
+      <span style="margin-left:8px;color:var(--text-faint);font-size:11px;font-family:'JetBrains Mono', monospace">Topic: ${esc(topicLabel)}</span>
+    </div>`;
+
+    const answerBlocks = results.map(r => `
+      <div class="compare-answer-block">
+        <div class="compare-answer-model">${esc(r.model)}</div>
+        <div class="compare-answer-text">${esc(r.answer)}</div>
+      </div>
+    `).join("");
+
+    return `<div class="compare-panel open">
+      <div class="compare-panel-title">Multi-Model Comparison — ${results.length} models</div>
+      ${evalBadge}
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead><tr><th>Metric</th>${modelHeaders}</tr></thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>
+      <div class="compare-section-title">Answers from each model</div>
+      ${answerBlocks}
     </div>`;
   }
 
-  function attachAnalyzeButton(wrap, query) {
-    const btn = document.createElement("button");
-    btn.className = "nlp-trigger";
-    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Analyze (NLP)`;
-    let panelEl = null;
+  // ---------- ACTION BUTTONS ----------
+  function attachActionButtons(wrap, query, answerText) {
+    const row = document.createElement("div");
+    row.className = "action-row";
 
-    btn.addEventListener("click", async () => {
-      if (panelEl) {
-        panelEl.style.display = panelEl.style.display === "none" ? "block" : "none";
-        return;
-      }
-      btn.classList.add("loading");
-      btn.innerHTML = "Analyzing…";
+    const nlpBtn = document.createElement("button");
+    nlpBtn.className = "nlp-trigger";
+    nlpBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Analyze (NLP)`;
+    let nlpPanelEl = null;
+    nlpBtn.addEventListener("click", async () => {
+      if (nlpPanelEl) { nlpPanelEl.style.display = nlpPanelEl.style.display === "none" ? "block" : "none"; return; }
+      nlpBtn.classList.add("loading");
+      nlpBtn.innerHTML = "Analyzing…";
       try {
-        const resp = await fetch(`${API}/nlp/analyze`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query }),
-        });
+        const resp = await fetch(`${API}/nlp/analyze`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }) });
         const data = await resp.json();
-        panelEl = document.createElement("div");
-        panelEl.innerHTML = renderNLPPanel(data);
-        wrap.appendChild(panelEl);
+        nlpPanelEl = document.createElement("div");
+        nlpPanelEl.innerHTML = renderNLPPanel(data);
+        wrap.appendChild(nlpPanelEl);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      } catch (e) { nlpBtn.innerHTML = `Error: ${e.message}`; }
+      nlpBtn.classList.remove("loading");
+      nlpBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> NLP Analysis`;
+    });
+
+    const metricsBtn = document.createElement("button");
+    metricsBtn.className = "metrics-trigger";
+    metricsBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 14V6M6 14V2M10 14V8M14 14V4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Show Metrics`;
+    let metricsPanelEl = null;
+    metricsBtn.addEventListener("click", async () => {
+      if (metricsPanelEl) { metricsPanelEl.style.display = metricsPanelEl.style.display === "none" ? "block" : "none"; return; }
+      metricsBtn.classList.add("loading");
+      metricsBtn.innerHTML = "Computing…";
+      try {
+        const resp = await fetch(`${API}/metrics/analyze`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query, answer: answerText }) });
+        const data = await resp.json();
+        metricsPanelEl = document.createElement("div");
+        metricsPanelEl.innerHTML = renderMetricsPanel(data);
+        wrap.appendChild(metricsPanelEl);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      } catch (e) { metricsBtn.innerHTML = `Error: ${e.message}`; }
+      metricsBtn.classList.remove("loading");
+      metricsBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Metrics`;
+    });
+
+    const compareBtn = document.createElement("button");
+    compareBtn.className = "compare-trigger";
+    compareBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 3h10M3 8h10M3 13h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Compare Models`;
+    let comparePanelEl = null;
+    compareBtn.addEventListener("click", async () => {
+      if (comparePanelEl) { comparePanelEl.style.display = comparePanelEl.style.display === "none" ? "block" : "none"; return; }
+      compareBtn.classList.add("loading");
+      compareBtn.innerHTML = "Running 3 models…";
+      const progressEl = document.createElement("div");
+      progressEl.className = "compare-panel open";
+      progressEl.innerHTML = `<div class="compare-panel-title">Multi-Model Comparison</div><div class="compare-progress">Running query against all available local models…<br>This typically takes 30 to 60 seconds (one LLM call per model).</div>`;
+      wrap.appendChild(progressEl);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      try {
+        const resp = await fetch(`${API}/compare`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }) });
+        const data = await resp.json();
+        progressEl.remove();
+        comparePanelEl = document.createElement("div");
+        comparePanelEl.innerHTML = renderComparePanel(data);
+        wrap.appendChild(comparePanelEl);
         messagesEl.scrollTop = messagesEl.scrollHeight;
       } catch (e) {
-        btn.innerHTML = `Error: ${e.message}`;
+        progressEl.innerHTML = `<div class="compare-panel-title">Multi-Model Comparison</div><div class="metric-note">Error: ${esc(e.message)}</div>`;
       }
-      btn.classList.remove("loading");
-      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> NLP Analysis`;
+      compareBtn.classList.remove("loading");
+      compareBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Comparison`;
     });
-    wrap.appendChild(btn);
+
+    row.appendChild(nlpBtn);
+    row.appendChild(metricsBtn);
+    row.appendChild(compareBtn);
+    wrap.appendChild(row);
   }
 
-  // ---------- sessions ----------
   const saveSessions = () => localStorage.setItem("arc_sessions", JSON.stringify(sessions));
-
   const renderSessions = () => {
     sessionListEl.innerHTML = sessions.map(s => `
-      <div class="session-item ${s.id === sessionId ? "active" : ""}" data-id="${s.id}">
-        ${esc(s.title)}
-      </div>
+      <div class="session-item ${s.id === sessionId ? "active" : ""}" data-id="${s.id}">${esc(s.title)}</div>
     `).join("") || `<div style="padding:10px 12px;font-size:12px;color:var(--text-faint);">No conversations yet</div>`;
     sessionListEl.querySelectorAll(".session-item").forEach(el => {
       el.addEventListener("click", () => {
@@ -833,30 +1013,20 @@
 
   const newChat = () => { sessionId = null; location.reload(); };
   newChatBtn.addEventListener("click", newChat);
-
   document.querySelectorAll(".suggestion").forEach(btn => {
     btn.addEventListener("click", () => { input.value = btn.dataset.q; input.focus(); updateSendBtn(); });
   });
-
   fetch(`${API}/models`).then(r => r.json()).then(data => {
-    modelSelect.innerHTML = data.models.map(m =>
-      `<option ${m === data.default ? "selected" : ""}>${m}</option>`
-    ).join("") || `<option>${data.default}</option>`;
-  }).catch(() => {
-    modelSelect.innerHTML = `<option>llama3.1:8b</option>`;
-  });
+    modelSelect.innerHTML = data.models.map(m => `<option ${m === data.default ? "selected" : ""}>${m}</option>`).join("") || `<option>${data.default}</option>`;
+  }).catch(() => { modelSelect.innerHTML = `<option>llama3.1:8b</option>`; });
 
   input.addEventListener("input", () => {
     input.style.height = "auto";
     input.style.height = Math.min(input.scrollHeight, 200) + "px";
     updateSendBtn();
   });
-
   const updateSendBtn = () => { sendBtn.disabled = !input.value.trim(); };
-
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
-  });
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
   sendBtn.addEventListener("click", send);
 
   async function send() {
@@ -865,31 +1035,19 @@
     input.value = "";
     input.style.height = "auto";
     updateSendBtn();
-
     addMessage("user", msg);
     const { wrap: aWrap, body: aBody } = addMessage("assistant", "", { streaming: true });
 
-    let buffer = "";
-    let fullText = "";
-    let meta = null;
-    let currentQuery = msg;
-
+    let buffer = "", fullText = "", meta = null, currentQuery = msg;
     try {
-      const resp = await fetch(`${API}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg, session_id: sessionId, model: modelSelect.value }),
-      });
-
+      const resp = await fetch(`${API}/chat`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: msg, session_id: sessionId, model: modelSelect.value }) });
       if (!resp.ok) {
         const err = await resp.json().catch(() => ({ detail: resp.statusText }));
         aBody.innerHTML = `<p style="color:#b85d3e">Error: ${esc(err.detail || "Request failed")}</p>`;
         return;
       }
-
       const reader = resp.body.getReader();
       const dec = new TextDecoder();
-
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
@@ -901,7 +1059,6 @@
           if (!line) continue;
           let evt;
           try { evt = JSON.parse(line); } catch { continue; }
-
           if (evt.type === "meta") {
             meta = evt;
             if (!sessionId) {
@@ -918,18 +1075,15 @@
           } else if (evt.type === "done") {
             aBody.innerHTML = renderMarkdownish(fullText);
             if (meta && meta.sources) attachSources(aWrap, meta.sources);
-            attachAnalyzeButton(aWrap, currentQuery);
+            attachActionButtons(aWrap, currentQuery, fullText);
             messagesEl.scrollTop = messagesEl.scrollHeight;
           } else if (evt.type === "error") {
             aBody.innerHTML = `<p style="color:#b85d3e">Error: ${esc(evt.error)}</p>`;
           }
         }
       }
-    } catch (e) {
-      aBody.innerHTML = `<p style="color:#b85d3e">Network error: ${esc(e.message)}</p>`;
-    }
+    } catch (e) { aBody.innerHTML = `<p style="color:#b85d3e">Network error: ${esc(e.message)}</p>`; }
   }
-
   renderSessions();
 })();
 </script>
